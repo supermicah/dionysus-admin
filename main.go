@@ -10,7 +10,7 @@ import (
 // Usage: go build -ldflags "-X main.VERSION=x.x.x"
 var VERSION = "v1.0.0"
 
-// @title dionysusadmin
+// @title dionysus_admin
 // @version v1.0.0
 // @description A test API service based on golang.
 // @securityDefinitions.apikey ApiKeyAuth
@@ -20,7 +20,7 @@ var VERSION = "v1.0.0"
 // @basePath /
 func main() {
 	app := cli.NewApp()
-	app.Name = "dionysusadmin"
+	app.Name = "dionysus_admin"
 	app.Version = VERSION
 	app.Usage = "A test API service based on golang."
 	app.Commands = []*cli.Command{

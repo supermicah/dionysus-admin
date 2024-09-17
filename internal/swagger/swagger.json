@@ -2,7 +2,7 @@
     "swagger": "2.0",
     "info": {
         "description": "A test API service based on golang.",
-        "title": "dionysusadmin",
+        "title": "dionysus_admin",
         "contact": {},
         "version": "v1.0.0"
     },

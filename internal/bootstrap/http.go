@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/casbin/casbin/v2"
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/dionysus-admin/internal/config"
 	"github.com/supermicah/dionysus-admin/internal/utility/prom"
 	"github.com/supermicah/dionysus-admin/internal/wirex"
@@ -15,8 +17,6 @@ import (
 	"github.com/supermicah/dionysus-admin/pkg/logging"
 	"github.com/supermicah/dionysus-admin/pkg/middleware"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/casbin/casbin/v2"
-	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.uber.org/zap"
@@ -143,6 +143,7 @@ func useHTTPMiddlewares(_ context.Context, e *gin.Engine, injector *wirex.Inject
 		AllowedPathPrefixes: allowedPrefixes,
 		SkippedPathPrefixes: config.C.Middleware.Auth.SkippedPathPrefixes,
 		ParseUserID:         injector.M.RBAC.LoginAPI.LoginBIZ.ParseUserID,
+		RootID:              config.C.General.Root.ID,
 	}))
 
 	e.Use(middleware.RateLimiterWithConfig(middleware.RateLimiterConfig{

@@ -1,4 +1,4 @@
-# dionysus-admin
+# dionysus_admin
 
 > A test API service based on golang.
 

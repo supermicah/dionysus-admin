@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"path/filepath"
 	"sort"
@@ -11,6 +12,7 @@ import (
 	"github.com/supermicah/dionysus-admin/internal/config"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/dal"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/schema"
+	"github.com/supermicah/dionysus-admin/pkg/cachex"
 	"github.com/supermicah/dionysus-admin/pkg/encoding/json"
 	"github.com/supermicah/dionysus-admin/pkg/encoding/yaml"
 	"github.com/supermicah/dionysus-admin/pkg/errors"
@@ -21,6 +23,7 @@ import (
 
 // Menu management for RBAC
 type Menu struct {
+	Cache           cachex.Cacher
 	Trans           *util.Trans
 	MenuDAL         *dal.Menu
 	MenuResourceDAL *dal.MenuResource
@@ -315,7 +318,7 @@ func (a *Menu) Create(ctx context.Context, formItem *schema.MenuForm) (*schema.M
 		menu.ParentPath = parent.ParentPath + parent.ID + util.TreePathDelimiter
 	}
 
-	if exists, err := a.MenuDAL.ExistsCodeByParentID(ctx, menu.Code, menu.ParentID); err != nil {
+	if exists, err := a.MenuDAL.ExistsCodeByParentID(ctx, formItem.Code, formItem.ParentID); err != nil {
 		return nil, err
 	} else if exists {
 		return nil, errors.BadRequest("", "Menu code already exists at the same level")
@@ -435,7 +438,7 @@ func (a *Menu) Update(ctx context.Context, id string, formItem *schema.MenuForm)
 			}
 		}
 
-		return nil
+		return a.syncToCasbin(ctx)
 	})
 }
 
@@ -473,7 +476,8 @@ func (a *Menu) Delete(ctx context.Context, id string) error {
 				return err
 			}
 		}
-		return nil
+
+		return a.syncToCasbin(ctx)
 	})
 }
 
@@ -488,4 +492,8 @@ func (a *Menu) delete(ctx context.Context, id string) error {
 		return err
 	}
 	return nil
+}
+
+func (a *Menu) syncToCasbin(ctx context.Context) error {
+	return a.Cache.Set(ctx, config.CacheNSForRole, config.CacheKeyForSyncToCasbin, fmt.Sprintf("%d", time.Now().Unix()))
 }

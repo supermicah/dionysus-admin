@@ -1,5 +1,5 @@
 [General]
-AppName = "dionysusadmin"
+AppName = "dionysus_admin"
 Version = "v10.0.2"
 Debug = true
 PprofAddr = "" # Pprof monitor address, "localhost:6060"
@@ -46,11 +46,11 @@ DB = 1
 Debug = true
 Type = "sqlite3" # sqlite3/mysql/postgres
 # SQLite3 DSN
-DSN = "data/dionysusadmin.db"
+DSN = "data/dionysus_admin.db"
 # MySQL DSN
-# DSN = "root:123@tcp(127.0.0.1:3306)/dionysusadmin?charset=utf8mb4&parseTime=True&loc=Local"
+# DSN = "root:123@tcp(127.0.0.1:3306)/dionysus_admin?charset=utf8mb4&parseTime=True&loc=Local"
 # PostgreSQL DSN
-# DSN = "host=localhost user=gorm password=gorm dbname=gorm port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+# DSN = "host=db user=postgres password=123456 dbname=dionysus_admin port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 MaxLifetime = 86400
 MaxIdleTime = 3600
 MaxOpenConns = 100
