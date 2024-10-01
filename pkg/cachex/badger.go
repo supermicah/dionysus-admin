@@ -8,13 +8,14 @@ import (
 	"unsafe"
 
 	"github.com/dgraph-io/badger/v3"
+	"github.com/supermicah/dionysus-admin/pkg/errors"
 )
 
 type BadgerConfig struct {
 	Path string
 }
 
-// Create badger-based cache
+// NewBadgerCache Create badger-based cache
 func NewBadgerCache(cfg BadgerConfig, opts ...Option) Cacher {
 	defaultOpts := &options{
 		Delimiter: defaultDelimiter,
@@ -75,7 +76,7 @@ func (a *badgerCache) Get(ctx context.Context, ns, key string) (string, bool, er
 	err := a.db.View(func(txn *badger.Txn) error {
 		item, err := txn.Get(a.strToBytes(a.getKey(ns, key)))
 		if err != nil {
-			if err == badger.ErrKeyNotFound {
+			if errors.Is(err, badger.ErrKeyNotFound) {
 				return nil
 			}
 			return err

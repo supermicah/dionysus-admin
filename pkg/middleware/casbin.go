@@ -1,10 +1,10 @@
 package middleware
 
 import (
-	"github.com/supermicah/dionysus-admin/pkg/errors"
-	"github.com/supermicah/dionysus-admin/pkg/util"
 	"github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/supermicah/dionysus-admin/pkg/errors"
+	"github.com/supermicah/dionysus-admin/pkg/util"
 )
 
 var ErrCasbinDenied = errors.Unauthorized("com.casbin.denied", "Permission denied")

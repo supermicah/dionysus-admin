@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/supermicah/dionysus-admin/pkg/logging"
-	"github.com/supermicah/dionysus-admin/pkg/util"
 	"github.com/gin-gonic/gin"
 	"github.com/rs/xid"
+	"github.com/supermicah/dionysus-admin/pkg/logging"
+	"github.com/supermicah/dionysus-admin/pkg/util"
 )
 
 type TraceConfig struct {

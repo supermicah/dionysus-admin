@@ -32,15 +32,15 @@ func NewS3Client(config S3ClientConfig) (*S3Client, error) {
 	awsConfig := aws.NewConfig()
 	awsConfig.WithRegion(config.Region)
 	awsConfig.WithCredentials(credentials.NewStaticCredentials(config.AccessKeyID, config.SecretAccessKey, ""))
-	session, err := session.NewSession(awsConfig)
+	newSession, err := session.NewSession(awsConfig)
 	if err != nil {
 		return nil, err
 	}
 
 	return &S3Client{
 		config:  config,
-		session: session,
-		client:  s3.New(session),
+		session: newSession,
+		client:  s3.New(newSession),
 	}, nil
 }
 

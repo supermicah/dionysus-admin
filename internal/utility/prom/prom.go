@@ -1,10 +1,10 @@
 package prom
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/dionysus-admin/internal/config"
 	"github.com/supermicah/dionysus-admin/pkg/promx"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 )
 
 var (

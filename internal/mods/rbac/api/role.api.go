@@ -1,10 +1,10 @@
 package api
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/biz"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 )
 
 // Role management for RBAC
@@ -12,6 +12,7 @@ type Role struct {
 	RoleBIZ *biz.Role
 }
 
+// Query
 // @Tags RoleAPI
 // @Security ApiKeyAuth
 // @Summary Query role list
@@ -39,6 +40,7 @@ func (a *Role) Query(c *gin.Context) {
 	util.ResPage(c, result.Data, result.PageResult)
 }
 
+// Get
 // @Tags RoleAPI
 // @Security ApiKeyAuth
 // @Summary Get role record by ID
@@ -57,6 +59,7 @@ func (a *Role) Get(c *gin.Context) {
 	util.ResSuccess(c, item)
 }
 
+// Create
 // @Tags RoleAPI
 // @Security ApiKeyAuth
 // @Summary Create role record
@@ -85,6 +88,7 @@ func (a *Role) Create(c *gin.Context) {
 	util.ResSuccess(c, result)
 }
 
+// Update
 // @Tags RoleAPI
 // @Security ApiKeyAuth
 // @Summary Update role record by ID
@@ -114,6 +118,7 @@ func (a *Role) Update(c *gin.Context) {
 	util.ResOK(c)
 }
 
+// Delete
 // @Tags RoleAPI
 // @Security ApiKeyAuth
 // @Summary Delete role record by ID

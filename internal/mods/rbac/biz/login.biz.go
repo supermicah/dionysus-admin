@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/LyricTian/captcha"
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/dionysus-admin/internal/config"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/dal"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/schema"
@@ -16,7 +17,6 @@ import (
 	"github.com/supermicah/dionysus-admin/pkg/jwtx"
 	"github.com/supermicah/dionysus-admin/pkg/logging"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
@@ -47,7 +47,7 @@ func (a *Login) ParseUserID(c *gin.Context) (string, error) {
 
 	userID, err := a.Auth.ParseSubject(ctx, token)
 	if err != nil {
-		if err == jwtx.ErrInvalidToken {
+		if errors.Is(err, jwtx.ErrInvalidToken) {
 			return "", invalidToken
 		}
 		return "", err
@@ -92,6 +92,7 @@ func (a *Login) ParseUserID(c *gin.Context) (string, error) {
 	return userID, nil
 }
 
+// GetCaptcha
 // This function generates a new captcha ID and returns it as a `schema.Captcha` struct. The length of
 // the captcha is determined by the `config.C.Util.Captcha.Length` configuration value.
 func (a *Login) GetCaptcha(ctx context.Context) (*schema.Captcha, error) {
@@ -100,6 +101,7 @@ func (a *Login) GetCaptcha(ctx context.Context) (*schema.Captcha, error) {
 	}, nil
 }
 
+// ResponseCaptcha
 // Response captcha image
 func (a *Login) ResponseCaptcha(ctx context.Context, w http.ResponseWriter, id string, reload bool) error {
 	if reload && !captcha.Reload(id) {
@@ -108,7 +110,7 @@ func (a *Login) ResponseCaptcha(ctx context.Context, w http.ResponseWriter, id s
 
 	err := captcha.WriteImage(w, id, config.C.Util.Captcha.Width, config.C.Util.Captcha.Height)
 	if err != nil {
-		if err == captcha.ErrNotFound {
+		if errors.Is(err, captcha.ErrNotFound) {
 			return errors.NotFound("", "Captcha id not found")
 		}
 		return err
@@ -240,6 +242,7 @@ func (a *Login) Logout(ctx context.Context) error {
 	return nil
 }
 
+// GetUserInfo
 // Get user info
 func (a *Login) GetUserInfo(ctx context.Context) (*schema.User, error) {
 	if util.FromIsRootUser(ctx) {
@@ -276,6 +279,7 @@ func (a *Login) GetUserInfo(ctx context.Context) (*schema.User, error) {
 	return user, nil
 }
 
+// UpdatePassword
 // Change login password
 func (a *Login) UpdatePassword(ctx context.Context, updateItem *schema.UpdateLoginPassword) error {
 	if util.FromIsRootUser(ctx) {
@@ -307,6 +311,7 @@ func (a *Login) UpdatePassword(ctx context.Context, updateItem *schema.UpdateLog
 	return a.UserDAL.UpdatePasswordByID(ctx, userID, newPassword)
 }
 
+// QueryMenus
 // Query menus based on user permissions
 func (a *Login) QueryMenus(ctx context.Context) (schema.Menus, error) {
 	menuQueryParams := schema.MenuQueryParam{
@@ -352,6 +357,7 @@ func (a *Login) QueryMenus(ctx context.Context) (schema.Menus, error) {
 	return menuResult.Data.ToTree(), nil
 }
 
+// UpdateUser
 // Update current user info
 func (a *Login) UpdateUser(ctx context.Context, updateItem *schema.UpdateCurrentUser) error {
 	if util.FromIsRootUser(ctx) {

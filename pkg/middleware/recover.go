@@ -6,10 +6,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/dionysus-admin/pkg/errors"
 	"github.com/supermicah/dionysus-admin/pkg/logging"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 

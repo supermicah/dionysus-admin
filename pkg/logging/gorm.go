@@ -31,7 +31,7 @@ func NewGormHook(db *gorm.DB) *GormHook {
 	}
 }
 
-// Gorm Logger Hook
+// GormHook Logger Hook
 type GormHook struct {
 	db *gorm.DB
 }

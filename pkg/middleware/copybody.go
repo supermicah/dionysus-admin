@@ -6,9 +6,9 @@ import (
 	"io"
 	"net/http"
 
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/dionysus-admin/pkg/errors"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 )
 
 type CopyBodyConfig struct {
@@ -57,7 +57,7 @@ func CopyBodyWithConfig(config CopyBodyConfig) gin.HandlerFunc {
 			return
 		}
 
-		c.Request.Body.Close()
+		_ = c.Request.Body.Close()
 		bf := bytes.NewBuffer(requestBody)
 		c.Request.Body = io.NopCloser(bf)
 		c.Set(util.ReqBodyKey, requestBody)

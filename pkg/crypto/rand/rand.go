@@ -23,9 +23,9 @@ var (
 	upperCaseLetters = []byte("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
 )
 
-// definition error
+// ErrInvalidFlag definition error
 var (
-	ErrInvalidFlag = errors.New("Invalid flag")
+	ErrInvalidFlag = errors.New("invalid flag")
 )
 
 // Random generate a random string specifying the length of the random number
@@ -77,10 +77,10 @@ func getFlagSource(flag int) ([]byte, error) {
 
 func randomBytesMod(length int, mod byte) ([]byte, error) {
 	b := make([]byte, length)
-	max := 255 - 255%mod
+	m := 255 - 255%mod
 	i := 0
 
-LROOT:
+ROOT:
 	for {
 		r, err := randomBytes(length + length/4)
 		if err != nil {
@@ -88,7 +88,7 @@ LROOT:
 		}
 
 		for _, c := range r {
-			if c >= max {
+			if c >= m {
 				// Skip this number to avoid modulo bias
 				continue
 			}
@@ -96,7 +96,7 @@ LROOT:
 			b[i] = c % mod
 			i++
 			if i == length {
-				break LROOT
+				break ROOT
 			}
 		}
 

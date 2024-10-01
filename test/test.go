@@ -6,10 +6,10 @@ import (
 	"os"
 	"testing"
 
-	"github.com/supermicah/dionysus-admin/internal/config"
-	"github.com/supermicah/dionysus-admin/internal/wirex"
 	"github.com/gavv/httpexpect/v2"
 	"github.com/gin-gonic/gin"
+	"github.com/supermicah/dionysus-admin/internal/config"
+	"github.com/supermicah/dionysus-admin/internal/wirex"
 )
 
 const (

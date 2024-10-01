@@ -1,13 +1,13 @@
 package rbac
 
 import (
+	"github.com/google/wire"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/api"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/biz"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/dal"
-	"github.com/google/wire"
 )
 
-// Collection of wire providers
+// Set Collection of wire providers
 var Set = wire.NewSet(
 	wire.Struct(new(RBAC), "*"),
 	wire.Struct(new(Casbinx), "*"),

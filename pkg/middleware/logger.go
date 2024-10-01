@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/dionysus-admin/pkg/logging"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
 
@@ -24,7 +24,7 @@ var DefaultLoggerConfig = LoggerConfig{
 	MaxOutputResponseBodyLen: 1024 * 1024,
 }
 
-// Record detailed request logs for quick troubleshooting.
+// Logger Record detailed request logs for quick troubleshooting.
 func Logger() gin.HandlerFunc {
 	return LoggerWithConfig(DefaultLoggerConfig)
 }

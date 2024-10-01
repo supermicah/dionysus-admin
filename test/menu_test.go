@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestMenu(t *testing.T) {
@@ -27,20 +27,20 @@ func TestMenu(t *testing.T) {
 	e.POST(baseAPI + "/menus").WithJSON(menuFormItem).
 		Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &menu})
 
-	assert := assert.New(t)
-	assert.NotEmpty(menu.ID)
-	assert.Equal(menuFormItem.Code, menu.Code)
-	assert.Equal(menuFormItem.Name, menu.Name)
-	assert.Equal(menuFormItem.Description, menu.Description)
-	assert.Equal(menuFormItem.Sequence, menu.Sequence)
-	assert.Equal(menuFormItem.Type, menu.Type)
-	assert.Equal(menuFormItem.Path, menu.Path)
-	assert.Equal(menuFormItem.Properties, menu.Properties)
-	assert.Equal(menuFormItem.Status, menu.Status)
+	as := assert.New(t)
+	as.NotEmpty(menu.ID)
+	as.Equal(menuFormItem.Code, menu.Code)
+	as.Equal(menuFormItem.Name, menu.Name)
+	as.Equal(menuFormItem.Description, menu.Description)
+	as.Equal(menuFormItem.Sequence, menu.Sequence)
+	as.Equal(menuFormItem.Type, menu.Type)
+	as.Equal(menuFormItem.Path, menu.Path)
+	as.Equal(menuFormItem.Properties, menu.Properties)
+	as.Equal(menuFormItem.Status, menu.Status)
 
 	var menus schema.Menus
 	e.GET(baseAPI + "/menus").Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &menus})
-	assert.GreaterOrEqual(len(menus), 1)
+	as.GreaterOrEqual(len(menus), 1)
 
 	newName := "Menu management 1"
 	newStatus := schema.MenuStatusDisabled
@@ -50,8 +50,8 @@ func TestMenu(t *testing.T) {
 
 	var getMenu schema.Menu
 	e.GET(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &getMenu})
-	assert.Equal(newName, getMenu.Name)
-	assert.Equal(newStatus, getMenu.Status)
+	as.Equal(newName, getMenu.Name)
+	as.Equal(newStatus, getMenu.Status)
 
 	e.DELETE(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusOK)
 	e.GET(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusNotFound)

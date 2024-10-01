@@ -4,9 +4,9 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestRole(t *testing.T) {
@@ -27,16 +27,16 @@ func TestRole(t *testing.T) {
 	e.POST(baseAPI + "/menus").WithJSON(menuFormItem).
 		Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &menu})
 
-	assert := assert.New(t)
-	assert.NotEmpty(menu.ID)
-	assert.Equal(menuFormItem.Code, menu.Code)
-	assert.Equal(menuFormItem.Name, menu.Name)
-	assert.Equal(menuFormItem.Description, menu.Description)
-	assert.Equal(menuFormItem.Sequence, menu.Sequence)
-	assert.Equal(menuFormItem.Type, menu.Type)
-	assert.Equal(menuFormItem.Path, menu.Path)
-	assert.Equal(menuFormItem.Properties, menu.Properties)
-	assert.Equal(menuFormItem.Status, menu.Status)
+	as := assert.New(t)
+	as.NotEmpty(menu.ID)
+	as.Equal(menuFormItem.Code, menu.Code)
+	as.Equal(menuFormItem.Name, menu.Name)
+	as.Equal(menuFormItem.Description, menu.Description)
+	as.Equal(menuFormItem.Sequence, menu.Sequence)
+	as.Equal(menuFormItem.Type, menu.Type)
+	as.Equal(menuFormItem.Path, menu.Path)
+	as.Equal(menuFormItem.Properties, menu.Properties)
+	as.Equal(menuFormItem.Status, menu.Status)
 
 	roleFormItem := schema.RoleForm{
 		Code: "admin",
@@ -51,17 +51,17 @@ func TestRole(t *testing.T) {
 
 	var role schema.Role
 	e.POST(baseAPI + "/roles").WithJSON(roleFormItem).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &role})
-	assert.NotEmpty(role.ID)
-	assert.Equal(roleFormItem.Code, role.Code)
-	assert.Equal(roleFormItem.Name, role.Name)
-	assert.Equal(roleFormItem.Description, role.Description)
-	assert.Equal(roleFormItem.Sequence, role.Sequence)
-	assert.Equal(roleFormItem.Status, role.Status)
-	assert.Equal(len(roleFormItem.Menus), len(role.Menus))
+	as.NotEmpty(role.ID)
+	as.Equal(roleFormItem.Code, role.Code)
+	as.Equal(roleFormItem.Name, role.Name)
+	as.Equal(roleFormItem.Description, role.Description)
+	as.Equal(roleFormItem.Sequence, role.Sequence)
+	as.Equal(roleFormItem.Status, role.Status)
+	as.Equal(len(roleFormItem.Menus), len(role.Menus))
 
 	var roles schema.Roles
 	e.GET(baseAPI + "/roles").Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &roles})
-	assert.GreaterOrEqual(len(roles), 1)
+	as.GreaterOrEqual(len(roles), 1)
 
 	newName := "Administrator 1"
 	newStatus := schema.RoleStatusDisabled
@@ -71,8 +71,8 @@ func TestRole(t *testing.T) {
 
 	var getRole schema.Role
 	e.GET(baseAPI + "/roles/" + role.ID).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &getRole})
-	assert.Equal(newName, getRole.Name)
-	assert.Equal(newStatus, getRole.Status)
+	as.Equal(newName, getRole.Name)
+	as.Equal(newStatus, getRole.Status)
 
 	e.DELETE(baseAPI + "/roles/" + role.ID).Expect().Status(http.StatusOK)
 	e.GET(baseAPI + "/roles/" + role.ID).Expect().Status(http.StatusNotFound)

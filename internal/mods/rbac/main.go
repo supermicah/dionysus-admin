@@ -4,11 +4,11 @@ import (
 	"context"
 	"path/filepath"
 
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/dionysus-admin/internal/config"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/api"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/dionysus-admin/pkg/logging"
-	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )

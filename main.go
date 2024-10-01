@@ -7,7 +7,7 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-// Usage: go build -ldflags "-X main.VERSION=x.x.x"
+// VERSION Usage: go build -ldflags "-X main.VERSION=x.x.x"
 var VERSION = "v1.0.0"
 
 // @title dionysus_admin

@@ -3,9 +3,9 @@ package sys
 import (
 	"context"
 
+	"github.com/gin-gonic/gin"
 	"github.com/supermicah/dionysus-admin/internal/config"
 	"github.com/supermicah/dionysus-admin/internal/mods/sys/api"
-	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 

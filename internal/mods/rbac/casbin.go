@@ -12,17 +12,17 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/casbin/casbin/v2"
 	"github.com/supermicah/dionysus-admin/internal/config"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/dal"
 	"github.com/supermicah/dionysus-admin/internal/mods/rbac/schema"
 	"github.com/supermicah/dionysus-admin/pkg/cachex"
 	"github.com/supermicah/dionysus-admin/pkg/logging"
 	"github.com/supermicah/dionysus-admin/pkg/util"
-	"github.com/casbin/casbin/v2"
 	"go.uber.org/zap"
 )
 
-// Load rbac permissions to casbin
+// Casbinx Load rbac permissions to casbin
 type Casbinx struct {
 	enforcer        *atomic.Value `wire:"-"`
 	ticker          *time.Ticker  `wire:"-"`

@@ -1,10 +1,10 @@
 package sys
 
 import (
+	"github.com/google/wire"
 	"github.com/supermicah/dionysus-admin/internal/mods/sys/api"
 	"github.com/supermicah/dionysus-admin/internal/mods/sys/biz"
 	"github.com/supermicah/dionysus-admin/internal/mods/sys/dal"
-	"github.com/google/wire"
 )
 
 var Set = wire.NewSet(

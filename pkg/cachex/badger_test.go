@@ -9,7 +9,7 @@ import (
 )
 
 func TestBadgerCache(t *testing.T) {
-	assert := assert.New(t)
+	as := assert.New(t)
 
 	cache := NewBadgerCache(BadgerConfig{
 		Path: "./tmp/badger",
@@ -17,40 +17,40 @@ func TestBadgerCache(t *testing.T) {
 
 	ctx := context.Background()
 	err := cache.Set(ctx, "tt", "foo", "bar")
-	assert.Nil(err)
+	as.Nil(err)
 
 	val, exists, err := cache.Get(ctx, "tt", "foo")
-	assert.Nil(err)
-	assert.True(exists)
-	assert.Equal("bar", val)
+	as.Nil(err)
+	as.True(exists)
+	as.Equal("bar", val)
 
 	err = cache.Delete(ctx, "tt", "foo")
-	assert.Nil(err)
+	as.Nil(err)
 
 	val, exists, err = cache.Get(ctx, "tt", "foo")
-	assert.Nil(err)
-	assert.False(exists)
-	assert.Equal("", val)
+	as.Nil(err)
+	as.False(exists)
+	as.Equal("", val)
 
 	tmap := make(map[string]bool)
 	for i := 0; i < 10; i++ {
 		key := fmt.Sprintf("foo%d", i)
 		err = cache.Set(ctx, "tt", key, "bar")
-		assert.Nil(err)
+		as.Nil(err)
 		tmap[key] = true
 
 		err = cache.Set(ctx, "ff", key, "bar")
-		assert.Nil(err)
+		as.Nil(err)
 	}
 
 	err = cache.Iterator(ctx, "tt", func(ctx context.Context, key, value string) bool {
-		assert.True(tmap[key])
-		assert.Equal("bar", value)
+		as.True(tmap[key])
+		as.Equal("bar", value)
 		t.Log(key, value)
 		return true
 	})
-	assert.Nil(err)
+	as.Nil(err)
 
 	err = cache.Close(ctx)
-	assert.Nil(err)
+	as.Nil(err)
 }

@@ -6,10 +6,10 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/creasty/defaults"
 	"github.com/supermicah/dionysus-admin/pkg/encoding/json"
 	"github.com/supermicah/dionysus-admin/pkg/encoding/toml"
 	"github.com/supermicah/dionysus-admin/pkg/errors"
-	"github.com/creasty/defaults"
 )
 
 var (
@@ -25,7 +25,7 @@ func MustLoad(dir string, names ...string) {
 	})
 }
 
-// Loads configuration files in various formats from a directory and parses them into
+// Load Loads configuration files in various formats from a directory and parses them into
 // a struct.
 func Load(dir string, names ...string) error {
 	// Set default values

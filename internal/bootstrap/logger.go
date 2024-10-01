@@ -3,10 +3,10 @@ package bootstrap
 import (
 	"context"
 
+	"github.com/spf13/cast"
 	"github.com/supermicah/dionysus-admin/internal/config"
 	"github.com/supermicah/dionysus-admin/pkg/gormx"
 	"github.com/supermicah/dionysus-admin/pkg/logging"
-	"github.com/spf13/cast"
 )
 
 func initLoggerHook(_ context.Context, cfg *logging.HookConfig) (*logging.Hook, error) {
