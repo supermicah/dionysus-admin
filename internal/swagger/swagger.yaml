@@ -67,10 +67,10 @@ definitions:
         description: Login name
         type: string
     required:
-    - captcha_code
-    - captcha_id
-    - password
-    - username
+      - captcha_code
+      - captcha_id
+      - password
+      - username
     type: object
   schema.LoginToken:
     properties:
@@ -169,20 +169,20 @@ definitions:
       status:
         description: Status of menu (enabled, disabled)
         enum:
-        - disabled
-        - enabled
+          - disabled
+          - enabled
         type: string
       type:
         description: Type of menu (page, button)
         enum:
-        - page
-        - button
+          - page
+          - button
         type: string
     required:
-    - code
-    - name
-    - status
-    - type
+      - code
+      - name
+      - status
+      - type
     type: object
   schema.MenuResource:
     properties:
@@ -261,13 +261,13 @@ definitions:
       status:
         description: Status of role (enabled, disabled)
         enum:
-        - disabled
-        - enabled
+          - disabled
+          - enabled
         type: string
     required:
-    - code
-    - name
-    - status
+      - code
+      - name
+      - status
     type: object
   schema.RoleMenu:
     properties:
@@ -306,7 +306,7 @@ definitions:
         maxLength: 1024
         type: string
     required:
-    - name
+      - name
     type: object
   schema.UpdateLoginPassword:
     properties:
@@ -317,8 +317,8 @@ definitions:
         description: Old password (md5 hash)
         type: string
     required:
-    - new_password
-    - old_password
+      - new_password
+      - old_password
     type: object
   schema.User:
     properties:
@@ -385,18 +385,18 @@ definitions:
       status:
         description: Status of user (activated, freezed)
         enum:
-        - activated
-        - freezed
+          - activated
+          - freezed
         type: string
       username:
         description: Username for login
         maxLength: 64
         type: string
     required:
-    - name
-    - roles
-    - status
-    - username
+      - name
+      - roles
+      - status
+      - username
     type: object
   schema.UserRole:
     properties:
@@ -421,7 +421,7 @@ definitions:
     type: object
   util.ResponseResult:
     properties:
-      data: {}
+      data: { }
       error:
         $ref: '#/definitions/errors.Error'
       success:
@@ -430,7 +430,7 @@ definitions:
         type: integer
     type: object
 info:
-  contact: {}
+  contact: { }
   description: A test API service based on golang.
   title: dionysus_admin
   version: v1.0.0
@@ -442,28 +442,28 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.Captcha'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.Captcha'
+                type: object
       summary: Get captcha ID
       tags:
-      - LoginAPI
+        - LoginAPI
   /api/v1/captcha/image:
     get:
       parameters:
-      - description: Captcha ID
-        in: query
-        name: id
-        required: true
-        type: string
-      - description: Reload captcha image (reload=1)
-        in: query
-        name: reload
-        type: number
+        - description: Captcha ID
+          in: query
+          name: id
+          required: true
+          type: string
+        - description: Reload captcha image (reload=1)
+          in: query
+          name: reload
+          type: number
       produces:
-      - image/png
+        - image/png
       responses:
         "200":
           description: Captcha image
@@ -473,7 +473,7 @@ paths:
             $ref: '#/definitions/util.ResponseResult'
       summary: Response captcha image
       tags:
-      - LoginAPI
+        - LoginAPI
   /api/v1/current/logout:
     post:
       responses:
@@ -486,10 +486,10 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Logout system
       tags:
-      - LoginAPI
+        - LoginAPI
   /api/v1/current/menus:
     get:
       responses:
@@ -497,13 +497,13 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/schema.Menu'
-                  type: array
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    items:
+                      $ref: '#/definitions/schema.Menu'
+                    type: array
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -513,19 +513,19 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Query current user menus based on the current user role
       tags:
-      - LoginAPI
+        - LoginAPI
   /api/v1/current/password:
     put:
       parameters:
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/schema.UpdateLoginPassword'
+        - description: Request body
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/schema.UpdateLoginPassword'
       responses:
         "200":
           description: OK
@@ -544,10 +544,10 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Change current user password
       tags:
-      - LoginAPI
+        - LoginAPI
   /api/v1/current/refresh-token:
     post:
       responses:
@@ -555,11 +555,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.LoginToken'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.LoginToken'
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -569,10 +569,10 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Refresh current access token
       tags:
-      - LoginAPI
+        - LoginAPI
   /api/v1/current/user:
     get:
       responses:
@@ -580,11 +580,11 @@ paths:
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.User'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.User'
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -594,18 +594,18 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Get current user info
       tags:
-      - LoginAPI
+        - LoginAPI
     put:
       parameters:
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/schema.UpdateCurrentUser'
+        - description: Request body
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/schema.UpdateCurrentUser'
       responses:
         "200":
           description: OK
@@ -624,65 +624,65 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Update current user info
       tags:
-      - LoginAPI
+        - LoginAPI
   /api/v1/loggers:
     get:
       parameters:
-      - default: 1
-        description: pagination index
-        in: query
-        name: current
-        required: true
-        type: integer
-      - default: 10
-        description: pagination size
-        in: query
-        name: pageSize
-        required: true
-        type: integer
-      - description: log level
-        in: query
-        name: level
-        type: string
-      - description: trace ID
-        in: query
-        name: traceID
-        type: string
-      - description: user name
-        in: query
-        name: userName
-        type: string
-      - description: log tag
-        in: query
-        name: tag
-        type: string
-      - description: log message
-        in: query
-        name: message
-        type: string
-      - description: start time
-        in: query
-        name: startTime
-        type: string
-      - description: end time
-        in: query
-        name: endTime
-        type: string
+        - default: 1
+          description: pagination index
+          in: query
+          name: current
+          required: true
+          type: integer
+        - default: 10
+          description: pagination size
+          in: query
+          name: pageSize
+          required: true
+          type: integer
+        - description: log level
+          in: query
+          name: level
+          type: string
+        - description: trace ID
+          in: query
+          name: traceID
+          type: string
+        - description: user name
+          in: query
+          name: userName
+          type: string
+        - description: log tag
+          in: query
+          name: tag
+          type: string
+        - description: log message
+          in: query
+          name: message
+          type: string
+        - description: start time
+          in: query
+          name: startTime
+          type: string
+        - description: end time
+          in: query
+          name: endTime
+          type: string
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/schema.Logger'
-                  type: array
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    items:
+                      $ref: '#/definitions/schema.Logger'
+                    type: array
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -692,29 +692,29 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Query logger list
       tags:
-      - LoggerAPI
+        - LoggerAPI
   /api/v1/login:
     post:
       parameters:
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/schema.LoginForm'
+        - description: Request body
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/schema.LoginForm'
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.LoginToken'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.LoginToken'
+                type: object
         "400":
           description: Bad Request
           schema:
@@ -725,34 +725,34 @@ paths:
             $ref: '#/definitions/util.ResponseResult'
       summary: Login system with username and password
       tags:
-      - LoginAPI
+        - LoginAPI
   /api/v1/menus:
     get:
       parameters:
-      - description: Code path of menu (like xxx.xxx.xxx)
-        in: query
-        name: code
-        type: string
-      - description: Name of menu
-        in: query
-        name: name
-        type: string
-      - description: Whether to include menu resources
-        in: query
-        name: includeResources
-        type: boolean
+        - description: Code path of menu (like xxx.xxx.xxx)
+          in: query
+          name: code
+          type: string
+        - description: Name of menu
+          in: query
+          name: name
+          type: string
+        - description: Whether to include menu resources
+          in: query
+          name: includeResources
+          type: boolean
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/schema.Menu'
-                  type: array
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    items:
+                      $ref: '#/definitions/schema.Menu'
+                    type: array
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -762,28 +762,28 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Query menu tree data
       tags:
-      - MenuAPI
+        - MenuAPI
     post:
       parameters:
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/schema.MenuForm'
+        - description: Request body
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/schema.MenuForm'
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.Menu'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.Menu'
+                type: object
         "400":
           description: Bad Request
           schema:
@@ -797,18 +797,18 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Create menu record
       tags:
-      - MenuAPI
+        - MenuAPI
   /api/v1/menus/{id}:
     delete:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
       responses:
         "200":
           description: OK
@@ -823,27 +823,27 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Delete menu record by ID
       tags:
-      - MenuAPI
+        - MenuAPI
     get:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.Menu'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.Menu'
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -853,23 +853,23 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Get menu record by ID
       tags:
-      - MenuAPI
+        - MenuAPI
     put:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/schema.MenuForm'
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: Request body
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/schema.MenuForm'
       responses:
         "200":
           description: OK
@@ -888,45 +888,45 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Update menu record by ID
       tags:
-      - MenuAPI
+        - MenuAPI
   /api/v1/roles:
     get:
       parameters:
-      - default: 1
-        description: pagination index
-        in: query
-        name: current
-        required: true
-        type: integer
-      - default: 10
-        description: pagination size
-        in: query
-        name: pageSize
-        required: true
-        type: integer
-      - description: Display name of role
-        in: query
-        name: name
-        type: string
-      - description: Status of role (disabled, enabled)
-        in: query
-        name: status
-        type: string
+        - default: 1
+          description: pagination index
+          in: query
+          name: current
+          required: true
+          type: integer
+        - default: 10
+          description: pagination size
+          in: query
+          name: pageSize
+          required: true
+          type: integer
+        - description: Display name of role
+          in: query
+          name: name
+          type: string
+        - description: Status of role (disabled, enabled)
+          in: query
+          name: status
+          type: string
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/schema.Role'
-                  type: array
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    items:
+                      $ref: '#/definitions/schema.Role'
+                    type: array
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -936,28 +936,28 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Query role list
       tags:
-      - RoleAPI
+        - RoleAPI
     post:
       parameters:
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/schema.RoleForm'
+        - description: Request body
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/schema.RoleForm'
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.Role'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.Role'
+                type: object
         "400":
           description: Bad Request
           schema:
@@ -971,18 +971,18 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Create role record
       tags:
-      - RoleAPI
+        - RoleAPI
   /api/v1/roles/{id}:
     delete:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
       responses:
         "200":
           description: OK
@@ -997,27 +997,27 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Delete role record by ID
       tags:
-      - RoleAPI
+        - RoleAPI
     get:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.Role'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.Role'
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -1027,23 +1027,23 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Get role record by ID
       tags:
-      - RoleAPI
+        - RoleAPI
     put:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/schema.RoleForm'
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: Request body
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/schema.RoleForm'
       responses:
         "200":
           description: OK
@@ -1062,49 +1062,49 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Update role record by ID
       tags:
-      - RoleAPI
+        - RoleAPI
   /api/v1/users:
     get:
       parameters:
-      - default: 1
-        description: pagination index
-        in: query
-        name: current
-        required: true
-        type: integer
-      - default: 10
-        description: pagination size
-        in: query
-        name: pageSize
-        required: true
-        type: integer
-      - description: Username for login
-        in: query
-        name: username
-        type: string
-      - description: Name of user
-        in: query
-        name: name
-        type: string
-      - description: Status of user (activated, freezed)
-        in: query
-        name: status
-        type: string
+        - default: 1
+          description: pagination index
+          in: query
+          name: current
+          required: true
+          type: integer
+        - default: 10
+          description: pagination size
+          in: query
+          name: pageSize
+          required: true
+          type: integer
+        - description: Username for login
+          in: query
+          name: username
+          type: string
+        - description: Name of user
+          in: query
+          name: name
+          type: string
+        - description: Status of user (activated, freezed)
+          in: query
+          name: status
+          type: string
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/schema.User'
-                  type: array
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    items:
+                      $ref: '#/definitions/schema.User'
+                    type: array
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -1114,28 +1114,28 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Query user list
       tags:
-      - UserAPI
+        - UserAPI
     post:
       parameters:
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/schema.UserForm'
+        - description: Request body
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/schema.UserForm'
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.User'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.User'
+                type: object
         "400":
           description: Bad Request
           schema:
@@ -1149,18 +1149,18 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Create user record
       tags:
-      - UserAPI
+        - UserAPI
   /api/v1/users/{id}:
     delete:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
       responses:
         "200":
           description: OK
@@ -1175,27 +1175,27 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Delete user record by ID
       tags:
-      - UserAPI
+        - UserAPI
     get:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
       responses:
         "200":
           description: OK
           schema:
             allOf:
-            - $ref: '#/definitions/util.ResponseResult'
-            - properties:
-                data:
-                  $ref: '#/definitions/schema.User'
-              type: object
+              - $ref: '#/definitions/util.ResponseResult'
+              - properties:
+                  data:
+                    $ref: '#/definitions/schema.User'
+                type: object
         "401":
           description: Unauthorized
           schema:
@@ -1205,23 +1205,23 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Get user record by ID
       tags:
-      - UserAPI
+        - UserAPI
     put:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Request body
-        in: body
-        name: body
-        required: true
-        schema:
-          $ref: '#/definitions/schema.UserForm'
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: Request body
+          in: body
+          name: body
+          required: true
+          schema:
+            $ref: '#/definitions/schema.UserForm'
       responses:
         "200":
           description: OK
@@ -1240,18 +1240,18 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Update user record by ID
       tags:
-      - UserAPI
+        - UserAPI
   /api/v1/users/{id}/reset-pwd:
     patch:
       parameters:
-      - description: unique id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: unique id
+          in: path
+          name: id
+          required: true
+          type: string
       responses:
         "200":
           description: OK
@@ -1266,10 +1266,10 @@ paths:
           schema:
             $ref: '#/definitions/util.ResponseResult'
       security:
-      - ApiKeyAuth: []
+        - ApiKeyAuth: [ ]
       summary: Reset user password by ID
       tags:
-      - UserAPI
+        - UserAPI
 securityDefinitions:
   ApiKeyAuth:
     in: header
