@@ -19,7 +19,7 @@ CertFile = ""
 KeyFile = ""
 
 [General.Root] # Super Administrator Account
-ID = "root"
+ID = "1"
 Username = "admin"
 Password = "6351623c8cef86fefabfa7da046fc619" # MD5("abc-123")
 Name = "Admin"
