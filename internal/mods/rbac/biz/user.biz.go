@@ -2,6 +2,7 @@ package biz
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/supermicah/dionysus-admin/internal/config"
@@ -56,7 +57,7 @@ func (a *User) Query(ctx context.Context, params schema.UserQueryParam) (*schema
 }
 
 // Get the specified user from the data access object.
-func (a *User) Get(ctx context.Context, id string) (*schema.User, error) {
+func (a *User) Get(ctx context.Context, id int64) (*schema.User, error) {
 	user, err := a.UserDAL.Get(ctx, id, schema.UserQueryOptions{
 		QueryOptions: util.QueryOptions{
 			OmitFields: []string{"password"},
@@ -89,7 +90,6 @@ func (a *User) Create(ctx context.Context, formItem *schema.UserForm) (*schema.U
 	}
 
 	user := &schema.User{
-		ID:        util.NewXID(),
 		CreatedAt: time.Now(),
 	}
 
@@ -107,7 +107,6 @@ func (a *User) Create(ctx context.Context, formItem *schema.UserForm) (*schema.U
 		}
 
 		for _, userRole := range formItem.Roles {
-			userRole.ID = util.NewXID()
 			userRole.UserID = user.ID
 			userRole.CreatedAt = time.Now()
 			if err := a.UserRoleDAL.Create(ctx, userRole); err != nil {
@@ -125,7 +124,7 @@ func (a *User) Create(ctx context.Context, formItem *schema.UserForm) (*schema.U
 }
 
 // Update the specified user in the data access object.
-func (a *User) Update(ctx context.Context, id string, formItem *schema.UserForm) error {
+func (a *User) Update(ctx context.Context, id int64, formItem *schema.UserForm) error {
 	user, err := a.UserDAL.Get(ctx, id)
 	if err != nil {
 		return err
@@ -154,9 +153,6 @@ func (a *User) Update(ctx context.Context, id string, formItem *schema.UserForm)
 			return err
 		}
 		for _, userRole := range formItem.Roles {
-			if userRole.ID == "" {
-				userRole.ID = util.NewXID()
-			}
 			userRole.UserID = user.ID
 			if userRole.CreatedAt.IsZero() {
 				userRole.CreatedAt = time.Now()
@@ -167,12 +163,12 @@ func (a *User) Update(ctx context.Context, id string, formItem *schema.UserForm)
 			}
 		}
 
-		return a.Cache.Delete(ctx, config.CacheNSForUser, id)
+		return a.Cache.Delete(ctx, config.CacheNSForUser, fmt.Sprintf("%d", id))
 	})
 }
 
 // Delete the specified user from the data access object.
-func (a *User) Delete(ctx context.Context, id string) error {
+func (a *User) Delete(ctx context.Context, id int64) error {
 	exists, err := a.UserDAL.Exists(ctx, id)
 	if err != nil {
 		return err
@@ -187,11 +183,11 @@ func (a *User) Delete(ctx context.Context, id string) error {
 		if err := a.UserRoleDAL.DeleteByUserID(ctx, id); err != nil {
 			return err
 		}
-		return a.Cache.Delete(ctx, config.CacheNSForUser, id)
+		return a.Cache.Delete(ctx, config.CacheNSForUser, fmt.Sprintf("%d", id))
 	})
 }
 
-func (a *User) ResetPassword(ctx context.Context, id string) error {
+func (a *User) ResetPassword(ctx context.Context, id int64) error {
 	exists, err := a.UserDAL.Exists(ctx, id)
 	if err != nil {
 		return err
@@ -212,7 +208,7 @@ func (a *User) ResetPassword(ctx context.Context, id string) error {
 	})
 }
 
-func (a *User) GetRoleIDs(ctx context.Context, id string) ([]string, error) {
+func (a *User) GetRoleIDs(ctx context.Context, id int64) ([]int64, error) {
 	userRoleResult, err := a.UserRoleDAL.Query(ctx, schema.UserRoleQueryParam{
 		UserID: id,
 	}, schema.UserRoleQueryOptions{

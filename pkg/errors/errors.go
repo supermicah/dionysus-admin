@@ -33,7 +33,7 @@ const (
 	DefaultRequestTimeoutID        = "request_timeout"
 )
 
-// Customize the error structure for implementation errors.Error interface
+// Error Customize the error structure for implementation errors.Error interface
 type Error struct {
 	ID     string `json:"id,omitempty"`
 	Code   int32  `json:"code,omitempty"`
@@ -207,7 +207,7 @@ func Equal(err1 error, err2 error) bool {
 	}
 
 	if !ok1 {
-		return err1 == err2
+		return errors.Is(err1, err2)
 	}
 
 	if verr1.Code != verr2.Code {

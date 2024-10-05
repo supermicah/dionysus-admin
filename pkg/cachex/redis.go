@@ -110,7 +110,7 @@ func (a *redisCache) Delete(ctx context.Context, ns, key string) error {
 	}
 
 	cmd := a.cli.Del(ctx, a.getKey(ns, key))
-	if err := cmd.Err(); err != nil && err != redis.Nil {
+	if err := cmd.Err(); err != nil && !errors.Is(err, redis.Nil) {
 		return err
 	}
 	return nil
@@ -125,7 +125,7 @@ func (a *redisCache) GetAndDelete(ctx context.Context, ns, key string) (string, 
 	}
 
 	cmd := a.cli.Del(ctx, a.getKey(ns, key))
-	if err := cmd.Err(); err != nil && err != redis.Nil {
+	if err := cmd.Err(); err != nil && !errors.Is(err, redis.Nil) {
 		return "", false, err
 	}
 	return value, true, nil

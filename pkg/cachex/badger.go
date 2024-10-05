@@ -97,7 +97,7 @@ func (a *badgerCache) Exists(ctx context.Context, ns, key string) (bool, error) 
 	err := a.db.View(func(txn *badger.Txn) error {
 		_, err := txn.Get(a.strToBytes(a.getKey(ns, key)))
 		if err != nil {
-			if err == badger.ErrKeyNotFound {
+			if errors.Is(err, badger.ErrKeyNotFound) {
 				return nil
 			}
 			return err

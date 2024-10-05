@@ -53,7 +53,7 @@ func FromTraceID(ctx context.Context) string {
 	return ""
 }
 
-func NewUserID(ctx context.Context, userID string) context.Context {
+func NewUserID(ctx context.Context, userID int64) context.Context {
 	return context.WithValue(ctx, ctxUserIDKey{}, userID)
 }
 

@@ -50,7 +50,8 @@ func (a *Menu) Query(c *gin.Context) {
 // @Router /api/v1/menus/{id} [get]
 func (a *Menu) Get(c *gin.Context) {
 	ctx := c.Request.Context()
-	item, err := a.MenuBIZ.Get(ctx, c.Param("id"))
+	id := util.ParseFormInt64(c, "id")
+	item, err := a.MenuBIZ.Get(ctx, id)
 	if err != nil {
 		util.ResError(c, err)
 		return
@@ -109,7 +110,7 @@ func (a *Menu) Update(c *gin.Context) {
 		return
 	}
 
-	err := a.MenuBIZ.Update(ctx, c.Param("id"), item)
+	err := a.MenuBIZ.Update(ctx, util.ParseFormInt64(c, "id"), item)
 	if err != nil {
 		util.ResError(c, err)
 		return
@@ -128,7 +129,7 @@ func (a *Menu) Update(c *gin.Context) {
 // @Router /api/v1/menus/{id} [delete]
 func (a *Menu) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
-	err := a.MenuBIZ.Delete(ctx, c.Param("id"))
+	err := a.MenuBIZ.Delete(ctx, util.ParseFormInt64(c, "id"))
 	if err != nil {
 		util.ResError(c, err)
 		return

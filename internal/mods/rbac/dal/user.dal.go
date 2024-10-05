@@ -51,7 +51,7 @@ func (a *User) Query(ctx context.Context, params schema.UserQueryParam, opts ...
 }
 
 // Get the specified user from the database.
-func (a *User) Get(ctx context.Context, id string, opts ...schema.UserQueryOptions) (*schema.User, error) {
+func (a *User) Get(ctx context.Context, id int64, opts ...schema.UserQueryOptions) (*schema.User, error) {
 	var opt schema.UserQueryOptions
 	if len(opts) > 0 {
 		opt = opts[0]
@@ -84,7 +84,7 @@ func (a *User) GetByUsername(ctx context.Context, username string, opts ...schem
 }
 
 // Exists Exist checks if the specified user exists in the database.
-func (a *User) Exists(ctx context.Context, id string) (bool, error) {
+func (a *User) Exists(ctx context.Context, id int64) (bool, error) {
 	ok, err := util.Exists(ctx, GetUserDB(ctx, a.DB).Where("id=?", id))
 	return ok, errors.WithStack(err)
 }
@@ -113,12 +113,12 @@ func (a *User) Update(ctx context.Context, item *schema.User, selectFields ...st
 }
 
 // Delete the specified user from the database.
-func (a *User) Delete(ctx context.Context, id string) error {
+func (a *User) Delete(ctx context.Context, id int64) error {
 	result := GetUserDB(ctx, a.DB).Where("id=?", id).Delete(new(schema.User))
 	return errors.WithStack(result.Error)
 }
 
-func (a *User) UpdatePasswordByID(ctx context.Context, id string, password string) error {
+func (a *User) UpdatePasswordByID(ctx context.Context, id int64, password string) error {
 	result := GetUserDB(ctx, a.DB).Where("id=?", id).Select("password").Updates(schema.User{Password: password})
 	return errors.WithStack(result.Error)
 }

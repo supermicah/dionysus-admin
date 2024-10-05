@@ -9,12 +9,12 @@ import (
 
 // UserRole roles for RBAC
 type UserRole struct {
-	ID        string    `json:"id" gorm:"size:20;primarykey"`           // Unique ID
-	UserID    string    `json:"user_id" gorm:"size:20;index"`           // From User.ID
-	RoleID    string    `json:"role_id" gorm:"size:20;index"`           // From Role.ID
-	CreatedAt time.Time `json:"created_at" gorm:"index;"`               // Create time
-	UpdatedAt time.Time `json:"updated_at" gorm:"index;"`               // Update time
-	RoleName  string    `json:"role_name" gorm:"<-:false;-:migration;"` // From Role.Name
+	ID        int64     `json:"id" gorm:"size:20;primarykey;autoincrement"` // Unique ID
+	UserID    int64     `json:"user_id" gorm:"size:20;index"`               // From User.ID
+	RoleID    int64     `json:"role_id" gorm:"size:20;index"`               // From Role.ID
+	CreatedAt time.Time `json:"created_at" gorm:"index;"`                   // Create time
+	UpdatedAt time.Time `json:"updated_at" gorm:"index;"`                   // Update time
+	RoleName  string    `json:"role_name" gorm:"<-:false;-:migration;"`     // From Role.Name
 }
 
 func (a *UserRole) TableName() string {
@@ -24,9 +24,9 @@ func (a *UserRole) TableName() string {
 // UserRoleQueryParam Defining the query parameters for the `UserRole` struct.
 type UserRoleQueryParam struct {
 	util.PaginationParam
-	InUserIDs []string `form:"-"` // From User.ID
-	UserID    string   `form:"-"` // From User.ID
-	RoleID    string   `form:"-"` // From Role.ID
+	InUserIDs []int64 `form:"-"` // From User.ID
+	UserID    int64   `form:"-"` // From User.ID
+	RoleID    int64   `form:"-"` // From Role.ID
 }
 
 // UserRoleQueryOptions Defining the query options for the `UserRole` struct.
@@ -44,16 +44,16 @@ type UserRoleQueryResult struct {
 // UserRoles Defining the slice of `UserRole` struct.
 type UserRoles []*UserRole
 
-func (a UserRoles) ToUserIDMap() map[string]UserRoles {
-	m := make(map[string]UserRoles)
+func (a UserRoles) ToUserIDMap() map[int64]UserRoles {
+	m := make(map[int64]UserRoles)
 	for _, userRole := range a {
 		m[userRole.UserID] = append(m[userRole.UserID], userRole)
 	}
 	return m
 }
 
-func (a UserRoles) ToRoleIDs() []string {
-	var ids []string
+func (a UserRoles) ToRoleIDs() []int64 {
+	var ids []int64
 	for _, item := range a {
 		ids = append(ids, item.RoleID)
 	}

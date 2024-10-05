@@ -40,7 +40,7 @@ func (a *Casbinx) GetEnforcer() *casbin.Enforcer {
 }
 
 type policyQueueItem struct {
-	RoleID    string
+	RoleID    int64
 	Resources schema.MenuResources
 }
 
@@ -85,7 +85,7 @@ func (a *Casbinx) load(ctx context.Context) error {
 			ibuf := new(bytes.Buffer)
 			for item := range queue {
 				for _, res := range item.Resources {
-					_, _ = ibuf.WriteString(fmt.Sprintf("p, %s, %s, %s \n", item.RoleID, res.Path, res.Method))
+					_, _ = ibuf.WriteString(fmt.Sprintf("p, %d, %s, %s \n", item.RoleID, res.Path, res.Method))
 				}
 			}
 			lock.Lock()
@@ -139,7 +139,7 @@ func (a *Casbinx) load(ctx context.Context) error {
 	return nil
 }
 
-func (a *Casbinx) queryRoleResources(ctx context.Context, roleID string) (schema.MenuResources, error) {
+func (a *Casbinx) queryRoleResources(ctx context.Context, roleID int64) (schema.MenuResources, error) {
 	menuResult, err := a.MenuDAL.Query(ctx, schema.MenuQueryParam{
 		RoleID: roleID,
 		Status: schema.MenuStatusEnabled,
@@ -154,8 +154,8 @@ func (a *Casbinx) queryRoleResources(ctx context.Context, roleID string) (schema
 		return nil, nil
 	}
 
-	menuIDs := make([]string, 0, len(menuResult.Data))
-	menuIDMapper := make(map[string]struct{})
+	menuIDs := make([]int64, 0, len(menuResult.Data))
+	menuIDMapper := make(map[int64]struct{})
 	for _, item := range menuResult.Data {
 		if _, ok := menuIDMapper[item.ID]; ok {
 			continue
@@ -163,10 +163,11 @@ func (a *Casbinx) queryRoleResources(ctx context.Context, roleID string) (schema
 		menuIDs = append(menuIDs, item.ID)
 		menuIDMapper[item.ID] = struct{}{}
 		if pp := item.ParentPath; pp != "" {
-			for _, pid := range strings.Split(pp, util.TreePathDelimiter) {
-				if pid == "" {
+			for _, parentID := range strings.Split(pp, util.TreePathDelimiter) {
+				if parentID == "" {
 					continue
 				}
+				pid, _ := strconv.ParseInt(parentID, 10, 64)
 				if _, ok := menuIDMapper[pid]; ok {
 					continue
 				}

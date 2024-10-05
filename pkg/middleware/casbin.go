@@ -14,7 +14,7 @@ type CasbinConfig struct {
 	SkippedPathPrefixes []string
 	Skipper             func(c *gin.Context) bool
 	GetEnforcer         func(c *gin.Context) *casbin.Enforcer
-	GetSubjects         func(c *gin.Context) []string
+	GetSubjects         func(c *gin.Context) []int64
 }
 
 func CasbinWithConfig(config CasbinConfig) gin.HandlerFunc {

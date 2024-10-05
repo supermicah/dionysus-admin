@@ -9,11 +9,11 @@ import (
 
 // RoleMenu permissions for RBAC
 type RoleMenu struct {
-	ID        string    `json:"id" gorm:"size:20;primarykey"` // Unique ID
-	RoleID    string    `json:"role_id" gorm:"size:20;index"` // From Role.ID
-	MenuID    string    `json:"menu_id" gorm:"size:20;index"` // From Menu.ID
-	CreatedAt time.Time `json:"created_at" gorm:"index;"`     // Create time
-	UpdatedAt time.Time `json:"updated_at" gorm:"index;"`     // Update time
+	ID        int64     `json:"id" gorm:"size:20;primarykey;autoincrement;"` // Unique ID
+	RoleID    int64     `json:"role_id" gorm:"size:20;index"`                // From Role.ID
+	MenuID    int64     `json:"menu_id" gorm:"size:20;index"`                // From Menu.ID
+	CreatedAt time.Time `json:"created_at" gorm:"index;"`                    // Create time
+	UpdatedAt time.Time `json:"updated_at" gorm:"index;"`                    // Update time
 }
 
 func (a *RoleMenu) TableName() string {
@@ -23,7 +23,7 @@ func (a *RoleMenu) TableName() string {
 // RoleMenuQueryParam Defining the query parameters for the `RoleMenu` struct.
 type RoleMenuQueryParam struct {
 	util.PaginationParam
-	RoleID string `form:"-"` // From Role.ID
+	RoleID int64 `form:"-"` // From Role.ID
 }
 
 // RoleMenuQueryOptions Defining the query options for the `RoleMenu` struct.

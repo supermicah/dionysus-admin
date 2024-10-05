@@ -3,6 +3,7 @@ package jwtx
 import (
 	"context"
 	"errors"
+	"github.com/supermicah/dionysus-admin/pkg/util"
 	"time"
 
 	"github.com/golang-jwt/jwt"
@@ -14,7 +15,7 @@ type Auther interface {
 	// DestroyToken Invalidate a token by removing it from the token store.
 	DestroyToken(ctx context.Context, accessToken string) error
 	// ParseSubject Parse the subject (or user identifier) from a given access token.
-	ParseSubject(ctx context.Context, accessToken string) (string, error)
+	ParseSubject(ctx context.Context, accessToken string) (int64, error)
 	// Release any resources held by the JWTAuth instance.
 	Release(ctx context.Context) error
 }
@@ -158,14 +159,14 @@ func (a *JWTAuth) DestroyToken(ctx context.Context, tokenStr string) error {
 	})
 }
 
-func (a *JWTAuth) ParseSubject(ctx context.Context, tokenStr string) (string, error) {
+func (a *JWTAuth) ParseSubject(ctx context.Context, tokenStr string) (int64, error) {
 	if tokenStr == "" {
-		return "", ErrInvalidToken
+		return 0, ErrInvalidToken
 	}
 
 	claims, err := a.parseToken(tokenStr)
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
 	err = a.callStore(func(store Storer) error {
@@ -177,10 +178,10 @@ func (a *JWTAuth) ParseSubject(ctx context.Context, tokenStr string) (string, er
 		return nil
 	})
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
-	return claims.Subject, nil
+	return util.IDToInt64(claims.Subject), nil
 }
 
 func (a *JWTAuth) Release(ctx context.Context) error {

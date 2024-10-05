@@ -9,12 +9,12 @@ import (
 
 // MenuResource resource management for RBAC
 type MenuResource struct {
-	ID        string    `json:"id" gorm:"size:20;primarykey"` // Unique ID
-	MenuID    string    `json:"menu_id" gorm:"size:20;index"` // From Menu.ID
-	Method    string    `json:"method" gorm:"size:20;"`       // HTTP method
-	Path      string    `json:"path" gorm:"size:255;"`        // API request path (e.g. /api/v1/users/:id)
-	CreatedAt time.Time `json:"created_at" gorm:"index;"`     // Create time
-	UpdatedAt time.Time `json:"updated_at" gorm:"index;"`     // Update time
+	ID        int64     `json:"id" gorm:"size:20;primarykey;autoincrement"` // Unique ID
+	MenuID    int64     `json:"menu_id" gorm:"size:20;index"`               // From Menu.ID
+	Method    string    `json:"method" gorm:"size:20;"`                     // HTTP method
+	Path      string    `json:"path" gorm:"size:255;"`                      // API request path (e.g. /api/v1/users/:id)
+	CreatedAt time.Time `json:"created_at" gorm:"index;"`                   // Create time
+	UpdatedAt time.Time `json:"updated_at" gorm:"index;"`                   // Update time
 }
 
 func (a *MenuResource) TableName() string {
@@ -24,8 +24,8 @@ func (a *MenuResource) TableName() string {
 // MenuResourceQueryParam Defining the query parameters for the `MenuResource` struct.
 type MenuResourceQueryParam struct {
 	util.PaginationParam
-	MenuID  string   `form:"-"` // From Menu.ID
-	MenuIDs []string `form:"-"` // From Menu.ID
+	MenuID  int64   `form:"-"` // From Menu.ID
+	MenuIDs []int64 `form:"-"` // From Menu.ID
 }
 
 // MenuResourceQueryOptions Defining the query options for the `MenuResource` struct.

@@ -87,7 +87,7 @@ func startHTTPServer(ctx context.Context, injector *wirex.Injector) (func(), err
 			err = srv.ListenAndServe()
 		}
 
-		if err != nil && err != http.ErrServerClosed {
+		if err != nil && !errors.Is(err, http.ErrServerClosed) {
 			logging.Context(ctx).Error("Failed to listen http server", zap.Error(err))
 		}
 	}()
@@ -179,7 +179,7 @@ func useHTTPMiddlewares(_ context.Context, e *gin.Engine, injector *wirex.Inject
 		GetEnforcer: func(c *gin.Context) *casbin.Enforcer {
 			return injector.M.RBAC.Casbinx.GetEnforcer()
 		},
-		GetSubjects: func(c *gin.Context) []string {
+		GetSubjects: func(c *gin.Context) []int64 {
 			return util.FromUserCache(c.Request.Context()).RoleIDs
 		},
 	}))

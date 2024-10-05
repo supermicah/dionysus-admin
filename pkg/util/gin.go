@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"reflect"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -65,6 +66,16 @@ func ParseForm(c *gin.Context, obj interface{}) error {
 		return errors.BadRequest("", "Failed to parse form: %s", err.Error())
 	}
 	return nil
+}
+
+// ParseFormInt64 Parse body form data to struct
+func ParseFormInt64(c *gin.Context, key string) int64 {
+	keyStr := c.Param(key)
+	value, err := strconv.ParseInt(keyStr, 10, 64)
+	if err != nil {
+		return 0
+	}
+	return value
 }
 
 // ResJSON Response json data with status code

@@ -51,7 +51,7 @@ func (a *Role) Query(c *gin.Context) {
 // @Router /api/v1/roles/{id} [get]
 func (a *Role) Get(c *gin.Context) {
 	ctx := c.Request.Context()
-	item, err := a.RoleBIZ.Get(ctx, c.Param("id"))
+	item, err := a.RoleBIZ.Get(ctx, util.ParseFormInt64(c, "id"))
 	if err != nil {
 		util.ResError(c, err)
 		return
@@ -110,7 +110,7 @@ func (a *Role) Update(c *gin.Context) {
 		return
 	}
 
-	err := a.RoleBIZ.Update(ctx, c.Param("id"), item)
+	err := a.RoleBIZ.Update(ctx, util.ParseFormInt64(c, "id"), item)
 	if err != nil {
 		util.ResError(c, err)
 		return
@@ -129,7 +129,7 @@ func (a *Role) Update(c *gin.Context) {
 // @Router /api/v1/roles/{id} [delete]
 func (a *Role) Delete(c *gin.Context) {
 	ctx := c.Request.Context()
-	err := a.RoleBIZ.Delete(ctx, c.Param("id"))
+	err := a.RoleBIZ.Delete(ctx, util.ParseFormInt64(c, "id"))
 	if err != nil {
 		util.ResError(c, err)
 		return

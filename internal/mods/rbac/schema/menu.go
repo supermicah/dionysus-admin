@@ -2,6 +2,7 @@ package schema
 
 import (
 	"encoding/json"
+	"strconv"
 	"strings"
 	"time"
 
@@ -24,21 +25,21 @@ var (
 
 // Menu management for RBAC
 type Menu struct {
-	ID          string        `json:"id" gorm:"size:20;primarykey;"`      // Unique ID
-	Code        string        `json:"code" gorm:"size:32;index;"`         // Code of menu (unique for each level)
-	Name        string        `json:"name" gorm:"size:128;index"`         // Display name of menu
-	Description string        `json:"description" gorm:"size:1024"`       // Details about menu
-	Sequence    int           `json:"sequence" gorm:"index;"`             // Sequence for sorting (Order by desc)
-	Type        string        `json:"type" gorm:"size:20;index"`          // Type of menu (page, button)
-	Path        string        `json:"path" gorm:"size:255;"`              // Access path of menu
-	Properties  string        `json:"properties" gorm:"type:text;"`       // Properties of menu (JSON)
-	Status      string        `json:"status" gorm:"size:20;index"`        // Status of menu (enabled, disabled)
-	ParentID    string        `json:"parent_id" gorm:"size:20;index;"`    // Parent ID (From Menu.ID)
-	ParentPath  string        `json:"parent_path" gorm:"size:255;index;"` // Parent path (split by .)
-	Children    *Menus        `json:"children" gorm:"-"`                  // Child menus
-	CreatedAt   time.Time     `json:"created_at" gorm:"index;"`           // Create time
-	UpdatedAt   time.Time     `json:"updated_at" gorm:"index;"`           // Update time
-	Resources   MenuResources `json:"resources" gorm:"-"`                 // Resources of menu
+	ID          int64         `json:"id" gorm:"size:20;primarykey;autoincrement;"` // Unique ID
+	Code        string        `json:"code" gorm:"size:32;index;"`                  // Code of menu (unique for each level)
+	Name        string        `json:"name" gorm:"size:128;index"`                  // Display name of menu
+	Description string        `json:"description" gorm:"size:1024"`                // Details about menu
+	Sequence    int           `json:"sequence" gorm:"index;"`                      // Sequence for sorting (Order by desc)
+	Type        string        `json:"type" gorm:"size:20;index"`                   // Type of menu (page, button)
+	Path        string        `json:"path" gorm:"size:255;"`                       // Access path of menu
+	Properties  string        `json:"properties" gorm:"type:text;"`                // Properties of menu (JSON)
+	Status      string        `json:"status" gorm:"size:20;index"`                 // Status of menu (enabled, disabled)
+	ParentID    int64         `json:"parent_id" gorm:"size:20;index;"`             // Parent ID (From Menu.ID)
+	ParentPath  string        `json:"parent_path" gorm:"size:255;index;"`          // Parent path (split by .)
+	Children    *Menus        `json:"children" gorm:"-"`                           // Child menus
+	CreatedAt   time.Time     `json:"created_at" gorm:"index;"`                    // Create time
+	UpdatedAt   time.Time     `json:"updated_at" gorm:"index;"`                    // Update time
+	Resources   MenuResources `json:"resources" gorm:"-"`                          // Resources of menu
 }
 
 func (a *Menu) TableName() string {
@@ -48,15 +49,15 @@ func (a *Menu) TableName() string {
 // MenuQueryParam Defining the query parameters for the `Menu` struct.
 type MenuQueryParam struct {
 	util.PaginationParam
-	CodePath         string   `form:"code"`             // Code path (like xxx.xxx.xxx)
-	LikeName         string   `form:"name"`             // Display name of menu
-	IncludeResources bool     `form:"includeResources"` // Include resources
-	InIDs            []string `form:"-"`                // Include menu IDs
-	Status           string   `form:"-"`                // Status of menu (disabled, enabled)
-	ParentID         string   `form:"-"`                // Parent ID (From Menu.ID)
-	ParentPathPrefix string   `form:"-"`                // Parent path (split by .)
-	UserID           string   `form:"-"`                // User ID
-	RoleID           string   `form:"-"`                // Role ID
+	CodePath         string  `form:"code"`             // Code path (like xxx.xxx.xxx)
+	LikeName         string  `form:"name"`             // Display name of menu
+	IncludeResources bool    `form:"includeResources"` // Include resources
+	InIDs            []int64 `form:"-"`                // Include menu IDs
+	Status           string  `form:"-"`                // Status of menu (disabled, enabled)
+	ParentID         int64   `form:"-"`                // Parent ID (From Menu.ID)
+	ParentPathPrefix string  `form:"-"`                // Parent path (split by .)
+	UserID           int64   `form:"-"`                // User ID
+	RoleID           int64   `form:"-"`                // Role ID
 }
 
 // MenuQueryOptions Defining the query options for the `Menu` struct.
@@ -88,27 +89,28 @@ func (a Menus) Swap(i, j int) {
 	a[i], a[j] = a[j], a[i]
 }
 
-func (a Menus) ToMap() map[string]*Menu {
-	m := make(map[string]*Menu)
+func (a Menus) ToMap() map[int64]*Menu {
+	m := make(map[int64]*Menu)
 	for _, item := range a {
 		m[item.ID] = item
 	}
 	return m
 }
 
-func (a Menus) SplitParentIDs() []string {
-	parentIDs := make([]string, 0, len(a))
-	idMapper := make(map[string]struct{})
+func (a Menus) SplitParentIDs() []int64 {
+	parentIDs := make([]int64, 0, len(a))
+	idMapper := make(map[int64]struct{})
 	for _, item := range a {
 		if _, ok := idMapper[item.ID]; ok {
 			continue
 		}
 		idMapper[item.ID] = struct{}{}
 		if pp := item.ParentPath; pp != "" {
-			for _, pid := range strings.Split(pp, util.TreePathDelimiter) {
-				if pid == "" {
+			for _, parentID := range strings.Split(pp, util.TreePathDelimiter) {
+				if parentID == "" {
 					continue
 				}
+				pid, _ := strconv.ParseInt(parentID, 10, 64)
 				if _, ok := idMapper[pid]; ok {
 					continue
 				}
@@ -124,7 +126,7 @@ func (a Menus) ToTree() Menus {
 	var list Menus
 	m := a.ToMap()
 	for _, item := range a {
-		if item.ParentID == "" {
+		if item.ParentID <= 0 {
 			list = append(list, item)
 			continue
 		}
@@ -150,7 +152,7 @@ type MenuForm struct {
 	Path        string        `json:"path"`                                             // Access path of menu
 	Properties  string        `json:"properties"`                                       // Properties of menu (JSON)
 	Status      string        `json:"status" binding:"required,oneof=disabled enabled"` // Status of menu (enabled, disabled)
-	ParentID    string        `json:"parent_id"`                                        // Parent ID (From Menu.ID)
+	ParentID    int64         `json:"parent_id"`                                        // Parent ID (From Menu.ID)
 	Resources   MenuResources `json:"resources"`                                        // Resources of menu
 }
 

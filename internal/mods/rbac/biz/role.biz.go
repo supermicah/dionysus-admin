@@ -48,7 +48,7 @@ func (a *Role) Query(ctx context.Context, params schema.RoleQueryParam) (*schema
 }
 
 // Get the specified role from the data access object.
-func (a *Role) Get(ctx context.Context, id string) (*schema.Role, error) {
+func (a *Role) Get(ctx context.Context, id int64) (*schema.Role, error) {
 	role, err := a.RoleDAL.Get(ctx, id)
 	if err != nil {
 		return nil, err
@@ -76,7 +76,6 @@ func (a *Role) Create(ctx context.Context, formItem *schema.RoleForm) (*schema.R
 	}
 
 	role := &schema.Role{
-		ID:        util.NewXID(),
 		CreatedAt: time.Now(),
 	}
 	if err := formItem.FillTo(role); err != nil {
@@ -89,7 +88,6 @@ func (a *Role) Create(ctx context.Context, formItem *schema.RoleForm) (*schema.R
 		}
 
 		for _, roleMenu := range formItem.Menus {
-			roleMenu.ID = util.NewXID()
 			roleMenu.RoleID = role.ID
 			roleMenu.CreatedAt = time.Now()
 			if err := a.RoleMenuDAL.Create(ctx, roleMenu); err != nil {
@@ -107,7 +105,7 @@ func (a *Role) Create(ctx context.Context, formItem *schema.RoleForm) (*schema.R
 }
 
 // Update the specified role in the data access object.
-func (a *Role) Update(ctx context.Context, id string, formItem *schema.RoleForm) error {
+func (a *Role) Update(ctx context.Context, id int64, formItem *schema.RoleForm) error {
 	role, err := a.RoleDAL.Get(ctx, id)
 	if err != nil {
 		return err
@@ -134,9 +132,6 @@ func (a *Role) Update(ctx context.Context, id string, formItem *schema.RoleForm)
 			return err
 		}
 		for _, roleMenu := range formItem.Menus {
-			if roleMenu.ID == "" {
-				roleMenu.ID = util.NewXID()
-			}
 			roleMenu.RoleID = role.ID
 			if roleMenu.CreatedAt.IsZero() {
 				roleMenu.CreatedAt = time.Now()
@@ -151,7 +146,7 @@ func (a *Role) Update(ctx context.Context, id string, formItem *schema.RoleForm)
 }
 
 // Delete the specified role from the data access object.
-func (a *Role) Delete(ctx context.Context, id string) error {
+func (a *Role) Delete(ctx context.Context, id int64) error {
 	exists, err := a.RoleDAL.Exists(ctx, id)
 	if err != nil {
 		return err

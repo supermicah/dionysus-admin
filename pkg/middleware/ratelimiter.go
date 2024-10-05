@@ -53,8 +53,8 @@ func RateLimiterWithConfig(config RateLimiterConfig) gin.HandlerFunc {
 		)
 
 		ctx := c.Request.Context()
-		if userID := util.FromUserID(ctx); userID != "" {
-			allowed, err = store.Allow(ctx, userID, time.Second*time.Duration(config.Period), config.MaxRequestsPerUser)
+		if userID := util.FromUserID(ctx); userID <= 0 {
+			allowed, err = store.Allow(ctx, util.IDToString(userID), time.Second*time.Duration(config.Period), config.MaxRequestsPerUser)
 		} else {
 			allowed, err = store.Allow(ctx, c.ClientIP(), time.Second*time.Duration(config.Period), config.MaxRequestsPerIP)
 		}

@@ -67,16 +67,16 @@ func TestRole(t *testing.T) {
 	newStatus := schema.RoleStatusDisabled
 	role.Name = newName
 	role.Status = newStatus
-	e.PUT(baseAPI + "/roles/" + role.ID).WithJSON(role).Expect().Status(http.StatusOK)
+	e.PUT(baseAPI + "/roles/" + util.IDToString(role.ID)).WithJSON(role).Expect().Status(http.StatusOK)
 
 	var getRole schema.Role
-	e.GET(baseAPI + "/roles/" + role.ID).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &getRole})
+	e.GET(baseAPI + "/roles/" + util.IDToString(role.ID)).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &getRole})
 	as.Equal(newName, getRole.Name)
 	as.Equal(newStatus, getRole.Status)
 
-	e.DELETE(baseAPI + "/roles/" + role.ID).Expect().Status(http.StatusOK)
-	e.GET(baseAPI + "/roles/" + role.ID).Expect().Status(http.StatusNotFound)
+	e.DELETE(baseAPI + "/roles/" + util.IDToString(role.ID)).Expect().Status(http.StatusOK)
+	e.GET(baseAPI + "/roles/" + util.IDToString(role.ID)).Expect().Status(http.StatusNotFound)
 
-	e.DELETE(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusOK)
-	e.GET(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusNotFound)
+	e.DELETE(baseAPI + "/menus/" + util.IDToString(menu.ID)).Expect().Status(http.StatusOK)
+	e.GET(baseAPI + "/menus/" + util.IDToString(menu.ID)).Expect().Status(http.StatusNotFound)
 }

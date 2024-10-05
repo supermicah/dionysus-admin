@@ -27,7 +27,7 @@ func (a *RoleMenu) Query(ctx context.Context, params schema.RoleMenuQueryParam, 
 	}
 
 	db := GetRoleMenuDB(ctx, a.DB)
-	if v := params.RoleID; len(v) > 0 {
+	if v := params.RoleID; v > 0 {
 		db = db.Where("role_id = ?", v)
 	}
 
@@ -45,7 +45,7 @@ func (a *RoleMenu) Query(ctx context.Context, params schema.RoleMenuQueryParam, 
 }
 
 // Get the specified role menu from the database.
-func (a *RoleMenu) Get(ctx context.Context, id string, opts ...schema.RoleMenuQueryOptions) (*schema.RoleMenu, error) {
+func (a *RoleMenu) Get(ctx context.Context, id int64, opts ...schema.RoleMenuQueryOptions) (*schema.RoleMenu, error) {
 	var opt schema.RoleMenuQueryOptions
 	if len(opts) > 0 {
 		opt = opts[0]
@@ -62,7 +62,7 @@ func (a *RoleMenu) Get(ctx context.Context, id string, opts ...schema.RoleMenuQu
 }
 
 // Exists Exist checks if the specified role menu exists in the database.
-func (a *RoleMenu) Exists(ctx context.Context, id string) (bool, error) {
+func (a *RoleMenu) Exists(ctx context.Context, id int64) (bool, error) {
 	ok, err := util.Exists(ctx, GetRoleMenuDB(ctx, a.DB).Where("id=?", id))
 	return ok, errors.WithStack(err)
 }
@@ -80,19 +80,19 @@ func (a *RoleMenu) Update(ctx context.Context, item *schema.RoleMenu) error {
 }
 
 // Delete the specified role menu from the database.
-func (a *RoleMenu) Delete(ctx context.Context, id string) error {
+func (a *RoleMenu) Delete(ctx context.Context, id int64) error {
 	result := GetRoleMenuDB(ctx, a.DB).Where("id=?", id).Delete(new(schema.RoleMenu))
 	return errors.WithStack(result.Error)
 }
 
 // DeleteByRoleID Deletes role menus by role id.
-func (a *RoleMenu) DeleteByRoleID(ctx context.Context, roleID string) error {
+func (a *RoleMenu) DeleteByRoleID(ctx context.Context, roleID int64) error {
 	result := GetRoleMenuDB(ctx, a.DB).Where("role_id=?", roleID).Delete(new(schema.RoleMenu))
 	return errors.WithStack(result.Error)
 }
 
 // DeleteByMenuID Deletes role menus by menu id.
-func (a *RoleMenu) DeleteByMenuID(ctx context.Context, menuID string) error {
+func (a *RoleMenu) DeleteByMenuID(ctx context.Context, menuID int64) error {
 	result := GetRoleMenuDB(ctx, a.DB).Where("menu_id=?", menuID).Delete(new(schema.RoleMenu))
 	return errors.WithStack(result.Error)
 }

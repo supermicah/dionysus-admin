@@ -9,9 +9,9 @@ import (
 type AuthConfig struct {
 	AllowedPathPrefixes []string
 	SkippedPathPrefixes []string
-	RootID              string
+	RootID              int64
 	Skipper             func(c *gin.Context) bool
-	ParseUserID         func(c *gin.Context) (string, error)
+	ParseUserID         func(c *gin.Context) (int64, error)
 }
 
 func AuthWithConfig(config AuthConfig) gin.HandlerFunc {

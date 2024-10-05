@@ -90,19 +90,19 @@ func TestUser(t *testing.T) {
 	newStatus := schema.UserStatusFreezed
 	user.Name = newName
 	user.Status = newStatus
-	e.PUT(baseAPI + "/users/" + user.ID).WithJSON(user).Expect().Status(http.StatusOK)
+	e.PUT(baseAPI + "/users/" + util.IDToString(user.ID)).WithJSON(user).Expect().Status(http.StatusOK)
 
 	var getUser schema.User
-	e.GET(baseAPI + "/users/" + user.ID).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &getUser})
+	e.GET(baseAPI + "/users/" + util.IDToString(user.ID)).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &getUser})
 	as.Equal(newName, getUser.Name)
 	as.Equal(newStatus, getUser.Status)
 
-	e.DELETE(baseAPI + "/users/" + user.ID).Expect().Status(http.StatusOK)
-	e.GET(baseAPI + "/users/" + user.ID).Expect().Status(http.StatusNotFound)
+	e.DELETE(baseAPI + "/users/" + util.IDToString(user.ID)).Expect().Status(http.StatusOK)
+	e.GET(baseAPI + "/users/" + util.IDToString(user.ID)).Expect().Status(http.StatusNotFound)
 
-	e.DELETE(baseAPI + "/roles/" + role.ID).Expect().Status(http.StatusOK)
-	e.GET(baseAPI + "/roles/" + role.ID).Expect().Status(http.StatusNotFound)
+	e.DELETE(baseAPI + "/roles/" + util.IDToString(role.ID)).Expect().Status(http.StatusOK)
+	e.GET(baseAPI + "/roles/" + util.IDToString(role.ID)).Expect().Status(http.StatusNotFound)
 
-	e.DELETE(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusOK)
-	e.GET(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusNotFound)
+	e.DELETE(baseAPI + "/menus/" + util.IDToString(menu.ID)).Expect().Status(http.StatusOK)
+	e.GET(baseAPI + "/menus/" + util.IDToString(menu.ID)).Expect().Status(http.StatusNotFound)
 }

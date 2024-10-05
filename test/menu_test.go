@@ -46,13 +46,13 @@ func TestMenu(t *testing.T) {
 	newStatus := schema.MenuStatusDisabled
 	menu.Name = newName
 	menu.Status = newStatus
-	e.PUT(baseAPI + "/menus/" + menu.ID).WithJSON(menu).Expect().Status(http.StatusOK)
+	e.PUT(baseAPI + "/menus/" + util.IDToString(menu.ID)).WithJSON(menu).Expect().Status(http.StatusOK)
 
 	var getMenu schema.Menu
-	e.GET(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &getMenu})
+	e.GET(baseAPI + "/menus/" + util.IDToString(menu.ID)).Expect().Status(http.StatusOK).JSON().Decode(&util.ResponseResult{Data: &getMenu})
 	as.Equal(newName, getMenu.Name)
 	as.Equal(newStatus, getMenu.Status)
 
-	e.DELETE(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusOK)
-	e.GET(baseAPI + "/menus/" + menu.ID).Expect().Status(http.StatusNotFound)
+	e.DELETE(baseAPI + "/menus/" + util.IDToString(menu.ID)).Expect().Status(http.StatusOK)
+	e.GET(baseAPI + "/menus/" + util.IDToString(menu.ID)).Expect().Status(http.StatusNotFound)
 }
