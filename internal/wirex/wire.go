@@ -9,7 +9,6 @@ import (
 	"context"
 
 	"github.com/google/wire"
-
 	"github.com/supermicah/dionysus-admin/internal/mods"
 	"github.com/supermicah/dionysus-admin/pkg/util"
 )

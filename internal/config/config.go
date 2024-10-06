@@ -37,7 +37,7 @@ type General struct {
 		KeyFile         string
 	}
 	Root struct {
-		ID       int64  `default:"root"`
+		ID       int64  `default:"1"`
 		Username string `default:"admin"`
 		Password string
 		Name     string `default:"Admin"`
